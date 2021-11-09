@@ -4,7 +4,7 @@ SOURCES = sources
 CONFIG_SUB_REV = 3d5db9ebe860
 BINUTILS_VER = 2.33.1
 GCC_VER = 9.4.0
-MUSL_VER = 1.2.2
+MUSL_VER = ohos
 GMP_VER = 6.1.2
 MPC_VER = 1.1.0
 MPFR_VER = 4.0.2
@@ -64,7 +64,11 @@ $(patsubst hashes/%.sha1,$(SOURCES)/%,$(wildcard hashes/mpfr*)): SITE = $(MPFR_S
 $(patsubst hashes/%.sha1,$(SOURCES)/%,$(wildcard hashes/isl*)): SITE = $(ISL_SITE)
 $(patsubst hashes/%.sha1,$(SOURCES)/%,$(wildcard hashes/binutils*)): SITE = $(BINUTILS_SITE)
 $(patsubst hashes/%.sha1,$(SOURCES)/%,$(wildcard hashes/gcc*)): SITE = $(GCC_SITE)/$(basename $(basename $(notdir $@)))
+ifeq ($(MUSL_VER),ohos)
+$(shell $(OHOS_DIR)/third_party/musl/scripts/porting.sh -i $(OHOS_DIR)/third_party/musl -o musl-$(MUSL_VER) -p linux)
+else
 $(patsubst hashes/%.sha1,$(SOURCES)/%,$(wildcard hashes/musl*)): SITE = $(MUSL_SITE)
+endif
 $(patsubst hashes/%.sha1,$(SOURCES)/%,$(wildcard hashes/linux-5*)): SITE = $(LINUX_SITE)/v5.x
 $(patsubst hashes/%.sha1,$(SOURCES)/%,$(wildcard hashes/linux-4*)): SITE = $(LINUX_SITE)/v4.x
 $(patsubst hashes/%.sha1,$(SOURCES)/%,$(wildcard hashes/linux-3*)): SITE = $(LINUX_SITE)/v3.x
